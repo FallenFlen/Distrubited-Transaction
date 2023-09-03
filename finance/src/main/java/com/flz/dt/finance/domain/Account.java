@@ -1,20 +1,20 @@
-package com.flz.dt.finance.persist.entity;
+package com.flz.dt.finance.domain;
 
-import com.flz.dt.common.persist.entity.BaseEntity;
+import com.flz.dt.common.domain.DomainAggregateRoot;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
-@Table("account")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class AccountEntity extends BaseEntity {
+@Builder
+public class Account extends DomainAggregateRoot {
     private String userId;
     private BigDecimal credit;
 }

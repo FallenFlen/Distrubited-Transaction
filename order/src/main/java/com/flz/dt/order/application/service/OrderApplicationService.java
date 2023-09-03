@@ -1,25 +1,23 @@
-package com.flz.dt.order.service;
+package com.flz.dt.order.application.service;
 
-import com.flz.dt.order.command.OrderCreateCommand;
-import com.flz.dt.order.controller.converter.OrderDTOConverter;
+import com.flz.dt.order.application.controller.dto.OrderCreateRequestDTO;
 import com.flz.dt.order.domain.aggregate.Order;
 import com.flz.dt.order.domain.repository.OrderDomainRepository;
-import com.flz.dt.order.dto.OrderCreateRequestDTO;
+import com.flz.dt.order.domain.service.OrderDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderApplicationService {
     private final OrderDomainRepository orderDomainRepository;
-    private final OrderDTOConverter converter = OrderDTOConverter.INSTANCE;
+    private final OrderDomainService orderDomainService;
 
     @Transactional
     public void createOrder(OrderCreateRequestDTO requestDTO) {
         // 创建并保存订单
-        OrderCreateCommand command = converter.toCommand(requestDTO);
-        Order order = Order.create(command);
+        Order order = orderDomainService.createOrder(requestDTO);
         orderDomainRepository.save(order);
 
         // 财务模块扣减额度

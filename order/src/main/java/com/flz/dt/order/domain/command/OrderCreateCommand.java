@@ -1,4 +1,4 @@
-package com.flz.dt.order.command;
+package com.flz.dt.order.domain.command;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

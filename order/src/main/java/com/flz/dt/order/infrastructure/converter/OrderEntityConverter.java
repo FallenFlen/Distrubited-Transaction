@@ -1,7 +1,7 @@
-package com.flz.dt.order.persist.converter;
+package com.flz.dt.order.infrastructure.converter;
 
 import com.flz.dt.order.domain.aggregate.Order;
-import com.flz.dt.order.persist.entity.OrderEntity;
+import com.flz.dt.order.infrastructure.entity.OrderEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

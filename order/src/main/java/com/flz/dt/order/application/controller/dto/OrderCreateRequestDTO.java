@@ -1,4 +1,4 @@
-package com.flz.dt.order.dto;
+package com.flz.dt.order.application.controller.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

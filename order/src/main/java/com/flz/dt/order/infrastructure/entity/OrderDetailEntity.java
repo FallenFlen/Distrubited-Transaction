@@ -1,4 +1,4 @@
-package com.flz.dt.order.persist.entity;
+package com.flz.dt.order.infrastructure.entity;
 
 import com.flz.dt.common.persist.entity.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -13,9 +13,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table("order")
-public class OrderEntity extends BaseEntity {
-    private String userId;
-    private String description;
-    private BigDecimal totalPrice;
+@Table("order_detail")
+public class OrderDetailEntity extends BaseEntity {
+    private String orderId;
+    private String skuId;
+    private String skuName;
+    private Long count;
+    private BigDecimal price;
 }

@@ -1,12 +1,12 @@
 package com.flz.dt.order.domain.repository;
 
 import com.flz.dt.order.domain.aggregate.Order;
-import com.flz.dt.order.persist.converter.OrderDetailEntityConverter;
-import com.flz.dt.order.persist.converter.OrderEntityConverter;
-import com.flz.dt.order.persist.entity.OrderDetailEntity;
-import com.flz.dt.order.persist.entity.OrderEntity;
-import com.flz.dt.order.persist.repository.OrderDetailJDBCRepository;
-import com.flz.dt.order.persist.repository.OrderJDBCRepository;
+import com.flz.dt.order.infrastructure.converter.OrderDetailEntityConverter;
+import com.flz.dt.order.infrastructure.converter.OrderEntityConverter;
+import com.flz.dt.order.infrastructure.entity.OrderDetailEntity;
+import com.flz.dt.order.infrastructure.entity.OrderEntity;
+import com.flz.dt.order.infrastructure.repository.OrderDetailJDBCRepository;
+import com.flz.dt.order.infrastructure.repository.OrderJDBCRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

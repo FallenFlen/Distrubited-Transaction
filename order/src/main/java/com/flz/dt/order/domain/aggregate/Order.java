@@ -3,7 +3,7 @@ package com.flz.dt.order.domain.aggregate;
 import com.flz.dt.common.context.User;
 import com.flz.dt.common.context.UserContext;
 import com.flz.dt.common.domain.DomainAggregateRoot;
-import com.flz.dt.order.command.OrderCreateCommand;
+import com.flz.dt.order.domain.command.OrderCreateCommand;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

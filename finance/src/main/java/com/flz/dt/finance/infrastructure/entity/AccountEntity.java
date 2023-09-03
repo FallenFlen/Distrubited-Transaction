@@ -1,4 +1,4 @@
-package com.flz.dt.order.persist.entity;
+package com.flz.dt.finance.infrastructure.entity;
 
 import com.flz.dt.common.persist.entity.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -9,15 +9,12 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
+@Table("account")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table("order_detail")
-public class OrderDetailEntity extends BaseEntity {
-    private String orderId;
-    private String skuId;
-    private String skuName;
-    private Long count;
-    private BigDecimal price;
+public class AccountEntity extends BaseEntity {
+    private String userId;
+    private BigDecimal credit;
 }
