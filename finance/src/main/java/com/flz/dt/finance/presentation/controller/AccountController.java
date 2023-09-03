@@ -1,4 +1,4 @@
-package com.flz.dt.finance.application.controller;
+package com.flz.dt.finance.presentation.controller;
 
 import com.flz.finance.api.AccountApi;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
