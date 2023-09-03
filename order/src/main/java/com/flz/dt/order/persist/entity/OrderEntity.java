@@ -1,6 +1,6 @@
 package com.flz.dt.order.persist.entity;
 
-import com.flz.dt.order.persist.entity.base.BaseEntity;
+import com.flz.dt.common.persist.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
