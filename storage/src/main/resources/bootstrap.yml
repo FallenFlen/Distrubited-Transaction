@@ -1,0 +1,10 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: storage
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.39.233:8848
