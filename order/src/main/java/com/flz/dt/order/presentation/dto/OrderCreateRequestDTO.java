@@ -21,6 +21,8 @@ public class OrderCreateRequestDTO {
     @NotBlank
     private String description;
     @NotNull
+    private BigDecimal amount;
+    @NotNull
     @NotEmpty
     @Valid
     private List<OrderDetailCreateRequestDTO> details;
@@ -31,7 +33,7 @@ public class OrderCreateRequestDTO {
     @Setter
     public static class OrderDetailCreateRequestDTO {
         @NotNull
-        private Long skuId;
+        private String skuId;
         @NotBlank
         private String skuName;
         @NotNull
