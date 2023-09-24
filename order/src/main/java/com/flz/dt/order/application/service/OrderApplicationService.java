@@ -33,7 +33,7 @@ public class OrderApplicationService {
 
         // 财务模块扣减额度
         String userId = UserContext.getUser().getId();
-        changeCredit(order.getTotalPrice().negate(), userId);
+        changeCredit(order.getTotalPrice(), userId);
 
         // 库存模块扣减商品库存
         changeStorage(requestDTO.getDetails());
@@ -54,7 +54,7 @@ public class OrderApplicationService {
     private void changeCredit(BigDecimal totalPrice, String userId) {
         UserCreditChangeRequestDTO userCreditChangeRequestDTO = new UserCreditChangeRequestDTO();
         userCreditChangeRequestDTO.setUserId(userId);
-        userCreditChangeRequestDTO.setAmount(totalPrice);
+        userCreditChangeRequestDTO.setAmount(totalPrice.negate());
         financeClient.changeUserCredit(userCreditChangeRequestDTO);
     }
 }
