@@ -1,5 +1,6 @@
 package com.flz.dt.finance.presentation.controller;
 
+import com.flz.dt.finance.application.service.AccountService;
 import com.flz.finance.api.AccountApi;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
 import jakarta.validation.Valid;
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/account/credit")
 public class AccountController implements AccountApi {
+    private final AccountService accountService;
 
     @PutMapping
     @Override
     public void changeUserCredit(@RequestBody @Valid UserCreditChangeRequestDTO requestDTO) {
-
+        accountService.changeUserCredit(requestDTO);
     }
 }

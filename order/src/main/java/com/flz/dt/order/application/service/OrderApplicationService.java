@@ -33,7 +33,7 @@ public class OrderApplicationService {
 
         // 财务模块扣减额度
         String userId = UserContext.getUser().getId();
-        changeCredit(order.getTotalPrice(), userId);
+        changeCredit(order.getTotalPrice().negate(), userId);
 
         // 库存模块扣减商品库存
         changeStorage(requestDTO.getDetails());
