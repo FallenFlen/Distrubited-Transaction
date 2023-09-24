@@ -45,7 +45,7 @@ public class OrderApplicationService {
     private void changeStorage(List<OrderCreateRequestDTO.OrderDetailCreateRequestDTO> details) {
         StorageChangeRequestDTO storageChangeRequestDTO = new StorageChangeRequestDTO();
         List<StorageChangeRequestDTO.SkuStorage> skuStorages = details.stream()
-                .map(it -> new StorageChangeRequestDTO.SkuStorage(it.getSkuId(), it.getCount()))
+                .map(it -> new StorageChangeRequestDTO.SkuStorage(it.getSkuId(), -it.getCount()))
                 .collect(Collectors.toList());
         storageChangeRequestDTO.setSkuStorages(skuStorages);
         storageClient.batchChangeStorage(storageChangeRequestDTO);
