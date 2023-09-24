@@ -28,16 +28,17 @@ public class OrderApplicationService {
 
     @Transactional
     public void createOrder(OrderCreateRequestDTO requestDTO) {
+        OrderCreateCommand command = converter.toCommand(requestDTO);
+        Order order = Order.create(command);
+
         // 财务模块扣减额度
         String userId = UserContext.getUser().getId();
-        changeCredit(requestDTO.getAmount(), userId);
+        changeCredit(order.getTotalPrice(), userId);
 
         // 库存模块扣减商品库存
         changeStorage(requestDTO.getDetails());
 
-        // 创建并保存订单
-        OrderCreateCommand command = converter.toCommand(requestDTO);
-        Order order = Order.create(command);
+        // 保存订单
         orderDomainRepository.save(order);
     }
 
@@ -50,10 +51,10 @@ public class OrderApplicationService {
         storageClient.batchChangeStorage(storageChangeRequestDTO);
     }
 
-    private void changeCredit(BigDecimal amount, String userId) {
+    private void changeCredit(BigDecimal totalPrice, String userId) {
         UserCreditChangeRequestDTO userCreditChangeRequestDTO = new UserCreditChangeRequestDTO();
         userCreditChangeRequestDTO.setUserId(userId);
-        userCreditChangeRequestDTO.setAmount(amount);
+        userCreditChangeRequestDTO.setAmount(totalPrice);
         financeClient.changeUserCredit(userCreditChangeRequestDTO);
     }
 }

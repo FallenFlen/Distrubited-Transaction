@@ -21,8 +21,6 @@ public class OrderCreateRequestDTO {
     @NotBlank
     private String description;
     @NotNull
-    private BigDecimal amount;
-    @NotNull
     @NotEmpty
     @Valid
     private List<OrderDetailCreateRequestDTO> details;
