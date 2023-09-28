@@ -1,6 +1,7 @@
 package com.flz.dt.order.application.service;
 
 import com.flz.dt.common.context.UserContext;
+import com.flz.dt.common.exception.BusinessException;
 import com.flz.dt.order.application.client.FinanceClient;
 import com.flz.dt.order.application.client.StorageClient;
 import com.flz.dt.order.domain.aggregate.Order;
@@ -34,10 +35,14 @@ public class OrderApplicationService {
         // 财务模块扣减额度
         String userId = UserContext.getUser().getId();
         changeCredit(order.getTotalPrice(), userId);
-
+        if (Boolean.TRUE.equals(requestDTO.getTriggerStage1Exception())) {
+            throw new BusinessException("exception occurred after credit changed");
+        }
         // 库存模块扣减商品库存
         changeStorage(requestDTO.getDetails());
-
+        if (Boolean.TRUE.equals(requestDTO.getTriggerStage2Exception())) {
+            throw new BusinessException("exception occurred after credit and storage changed");
+        }
         // 保存订单
         orderDomainRepository.save(order);
     }

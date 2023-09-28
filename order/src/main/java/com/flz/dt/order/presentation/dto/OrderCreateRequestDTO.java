@@ -20,6 +20,8 @@ import java.util.List;
 public class OrderCreateRequestDTO {
     @NotBlank
     private String description;
+    private Boolean triggerStage1Exception;
+    private Boolean triggerStage2Exception;
     @NotNull
     @NotEmpty
     @Valid
