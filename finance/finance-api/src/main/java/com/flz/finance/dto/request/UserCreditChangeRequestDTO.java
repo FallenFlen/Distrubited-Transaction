@@ -21,4 +21,6 @@ public class UserCreditChangeRequestDTO {
     private UserCreditChangeAction action;
     @NotNull
     private BigDecimal amount;
+    @NotNull
+    private String transactionId;
 }

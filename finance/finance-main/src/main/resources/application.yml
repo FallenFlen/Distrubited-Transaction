@@ -4,6 +4,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: flms04
+  data:
+    redis:
+      url: 192.168.39.233
+      port: 16379
+      database: 1
   cloud:
     openfeign:
       httpclient:

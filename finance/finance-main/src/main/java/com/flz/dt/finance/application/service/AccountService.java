@@ -6,18 +6,31 @@ import com.flz.dt.finance.domain.repository.AccountDomainRepository;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
 import com.flz.finance.dto.response.FinanceInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountDomainRepository accountDomainRepository;
+    private final RedisTemplate redisTemplate;
 
     @Transactional
     public void changeUserCredit(UserCreditChangeRequestDTO requestDTO) {
+        // 动账需保证幂等
+        String redisKey = requestDTO.getAction().name().concat("_").concat(requestDTO.getTransactionId());
+        // setnx ttl:1h
+        if (!Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(redisKey, "CREDIT_ROLLBACK", 1, TimeUnit.HOURS))) {
+            log.info("avoid duplicate operating account with:{}", redisKey);
+            return;
+        }
+
         String userId = requestDTO.getUserId();
         BigDecimal amount = requestDTO.getAmount();
 
