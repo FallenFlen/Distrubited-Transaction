@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 public class Account extends DomainAggregateRoot {
     private String userId;
     private BigDecimal credit;
+    private List<AccountStatement> statements;
 
     public void change(BigDecimal amount) {
         this.credit = this.credit.add(amount);
