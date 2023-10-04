@@ -16,11 +16,12 @@ import java.time.LocalDateTime;
 @Setter(value = AccessLevel.PROTECTED)
 @SuperBuilder
 public abstract class DomainAggregateRoot {
-    private String id;
-    private String createBy;
-    private LocalDateTime createTime;
-    private String updateBy;
-    private LocalDateTime updateTime;
+    protected String id;
+    protected String createBy;
+    protected LocalDateTime createTime;
+    protected String updateBy;
+    protected LocalDateTime updateTime;
+    protected Integer version;
 
     protected void generateId() {
         this.id = IdGenerator.randomId();

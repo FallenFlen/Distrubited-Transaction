@@ -5,5 +5,6 @@ create table `account`(
     create_time datetime(3) default CURRENT_TIMESTAMP (3),
     create_by   varchar(50)    not null,
     update_time datetime(3) default CURRENT_TIMESTAMP (3),
-    update_by   varchar(50)    not null
+    update_by   varchar(50)    not null,
+    version     int(11)
 );

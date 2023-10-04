@@ -7,5 +7,6 @@ CREATE TABLE storage
     create_by   varchar(50) not null,
     update_time datetime(3) default CURRENT_TIMESTAMP (3),
     update_by   varchar(50) not null,
+    version     int(11),
     unique index uq_sku_id(sku_id)
 )

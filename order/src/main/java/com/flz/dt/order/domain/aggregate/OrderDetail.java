@@ -33,7 +33,7 @@ public class OrderDetail extends DomainAggregateRoot {
                 .price(command.getPrice())
                 .build();
         detail.generateId();
-        detail.createBy(UserContext.getUser().getName());
+        detail.createBy(UserContext.getUser().getId());
         return detail;
     }
 }

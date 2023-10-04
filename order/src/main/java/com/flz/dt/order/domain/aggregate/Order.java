@@ -33,6 +33,7 @@ public class Order extends DomainAggregateRoot {
                 .description(command.getDescription())
                 .build();
         order.generateId();
+        order.createBy(UserContext.getUser().getId());
 
         List<OrderDetail> details = command.getDetails().stream()
                 .map(it -> OrderDetail.create(order.getId(), it))
