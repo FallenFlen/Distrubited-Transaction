@@ -3,6 +3,7 @@ package com.flz.dt.finance.application.service;
 import com.flz.dt.common.exception.BusinessException;
 import com.flz.dt.finance.domain.aggrgate.Account;
 import com.flz.dt.finance.domain.repository.AccountDomainRepository;
+import com.flz.finance.dto.enums.UserCreditChangeAction;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
 import com.flz.finance.dto.response.FinanceInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,11 @@ public class AccountService {
 
     @Transactional
     public void changeUserCredit(UserCreditChangeRequestDTO requestDTO) {
+        UserCreditChangeAction action = requestDTO.getAction();
+        String transactionId = requestDTO.getTransactionId();
+
         // 动账需保证幂等
-        String redisKey = requestDTO.getAction().name().concat("_").concat(requestDTO.getTransactionId());
+        String redisKey = action.name().concat("_").concat(transactionId);
         // setnx ttl:1h
         if (!Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(redisKey, "CREDIT_ROLLBACK", 1, TimeUnit.HOURS))) {
             log.info("avoid duplicate operating account with:{}", redisKey);
@@ -33,7 +37,6 @@ public class AccountService {
 
         String userId = requestDTO.getUserId();
         BigDecimal amount = requestDTO.getAmount();
-
         // 用户账户找不到报错
         Account account = accountDomainRepository.findByUserId(userId);
         // 扣减额度时，不足报错
@@ -42,7 +45,12 @@ public class AccountService {
                     userId, account.getCredit(), amount));
         }
         // 变动金额
-        account.change(amount, requestDTO.getAction(), requestDTO.getTransactionId());
+        if (action == UserCreditChangeAction.CHANGE) {
+            account.change(amount, transactionId);
+        } else if (action == UserCreditChangeAction.ROLLBACK) { // 回滚
+            account.rollback(transactionId);
+        }
+
         accountDomainRepository.save(account);
     }
 
