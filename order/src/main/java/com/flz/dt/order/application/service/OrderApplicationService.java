@@ -2,11 +2,17 @@ package com.flz.dt.order.application.service;
 
 import com.flz.dt.common.context.UserContext;
 import com.flz.dt.common.exception.BusinessException;
+import com.flz.dt.common.utils.JsonUtils;
 import com.flz.dt.common.utils.UUIDUtils;
 import com.flz.dt.order.application.client.FinanceClient;
 import com.flz.dt.order.application.client.StorageClient;
+import com.flz.dt.order.common.utils.TransactionUtils;
+import com.flz.dt.order.domain.aggregate.LocalEvent;
 import com.flz.dt.order.domain.aggregate.Order;
+import com.flz.dt.order.domain.command.LocalEventCreateCommand;
 import com.flz.dt.order.domain.command.OrderCreateCommand;
+import com.flz.dt.order.domain.enums.LocalEventType;
+import com.flz.dt.order.domain.repository.LocalEventDomainRepository;
 import com.flz.dt.order.domain.repository.OrderDomainRepository;
 import com.flz.dt.order.presentation.converter.OrderDTOConverter;
 import com.flz.dt.order.presentation.dto.OrderCreateRequestDTO;
@@ -29,6 +35,8 @@ public class OrderApplicationService {
     private final OrderDomainRepository orderDomainRepository;
     private final FinanceClient financeClient;
     private final StorageClient storageClient;
+    private final TransactionUtils transactionUtils;
+    private final LocalEventDomainRepository localEventDomainRepository;
     private final OrderDTOConverter converter = OrderDTOConverter.INSTANCE;
 
     @Transactional
@@ -37,12 +45,16 @@ public class OrderApplicationService {
         Order order = Order.create(command);
 
         // 财务模块扣减额度
+        String transactionId = UUIDUtils.uuid32();
         String userId = UserContext.getUser().getId();
-        changeCredit(order.getTotalPrice(), userId);
+        transactionUtils.runAfterRollback(() -> rollbackCredit(order.getTotalPrice(), userId, transactionId));
+        changeCredit(order.getTotalPrice(), userId, transactionId);
         if (Boolean.TRUE.equals(requestDTO.getTriggerStage1Exception())) {
             throw new BusinessException("exception occurred after credit changed");
         }
+
         // 库存模块扣减商品库存
+
         changeStorage(requestDTO.getDetails());
         if (Boolean.TRUE.equals(requestDTO.getTriggerStage2Exception())) {
             throw new BusinessException("exception occurred after credit and storage changed");
@@ -60,13 +72,29 @@ public class OrderApplicationService {
         storageClient.batchChangeStorage(storageChangeRequestDTO);
     }
 
-    private void changeCredit(BigDecimal totalPrice, String userId) {
+    private void rollbackCredit(BigDecimal totalPrice, String userId, String transactionId) {
+        UserCreditChangeRequestDTO requestDTO = buildChangeCreditRequest(totalPrice, userId, transactionId, UserCreditChangeAction.ROLLBACK);
+        LocalEventCreateCommand localEventCreateCommand = LocalEventCreateCommand.builder()
+                .type(LocalEventType.FINANCE_CREDIT_ROLLBACK)
+                .body(JsonUtils.silentMarshal(requestDTO))
+                .build();
+        LocalEvent localEvent = LocalEvent.create(localEventCreateCommand);
+        localEventDomainRepository.saveAll(List.of(localEvent));
+    }
+
+    private void changeCredit(BigDecimal totalPrice, String userId, String transactionId) {
+        UserCreditChangeRequestDTO requestDTO = buildChangeCreditRequest(totalPrice, userId, transactionId, UserCreditChangeAction.CHANGE);
+        financeClient.changeUserCredit(requestDTO);
+    }
+
+    private UserCreditChangeRequestDTO buildChangeCreditRequest(BigDecimal totalPrice, String userId,
+                                                                String transactionId, UserCreditChangeAction action) {
         UserCreditChangeRequestDTO userCreditChangeRequestDTO = new UserCreditChangeRequestDTO();
         userCreditChangeRequestDTO.setUserId(userId);
         userCreditChangeRequestDTO.setAmount(totalPrice.negate());
-        userCreditChangeRequestDTO.setAction(UserCreditChangeAction.CHANGE);
-        userCreditChangeRequestDTO.setTransactionId(UUIDUtils.uuid32());
-        financeClient.changeUserCredit(userCreditChangeRequestDTO);
+        userCreditChangeRequestDTO.setAction(action);
+        userCreditChangeRequestDTO.setTransactionId(transactionId);
+        return userCreditChangeRequestDTO;
     }
 
     public PurchaseSummaryResponseDTO fetchPurchaseSummary(String userId, List<String> skuIds) {
