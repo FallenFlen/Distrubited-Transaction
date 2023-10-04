@@ -1,6 +1,6 @@
-package com.flz.dt.order.application.config;
+package com.flz.dt.order.common.config;
 
-import com.flz.dt.order.application.config.interceptor.UserInterceptor;
+import com.flz.dt.order.common.config.interceptor.UserInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

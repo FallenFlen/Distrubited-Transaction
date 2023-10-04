@@ -1,4 +1,4 @@
-package com.flz.dt.order.application.config.handler;
+package com.flz.dt.order.common.config.handler;
 
 import com.flz.dt.common.dto.ErrorResult;
 import com.flz.dt.common.exception.BusinessException;
