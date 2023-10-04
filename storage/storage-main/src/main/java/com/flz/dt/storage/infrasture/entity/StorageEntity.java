@@ -14,5 +14,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("storage")
 public class StorageEntity extends BaseEntity {
     private String skuId;
+    private String skuName;
     private Long count;
 }

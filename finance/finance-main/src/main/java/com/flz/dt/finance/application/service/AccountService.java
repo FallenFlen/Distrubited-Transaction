@@ -4,6 +4,7 @@ import com.flz.dt.common.exception.BusinessException;
 import com.flz.dt.finance.domain.aggrgate.Account;
 import com.flz.dt.finance.domain.repository.AccountDomainRepository;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
+import com.flz.finance.dto.response.FinanceInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,5 +31,10 @@ public class AccountService {
         // 变动金额
         account.change(amount);
         accountDomainRepository.save(account);
+    }
+
+    public FinanceInfoResponseDTO fetchFinanceInfo(String userId) {
+        Account account = accountDomainRepository.findByUserId(userId);
+        return new FinanceInfoResponseDTO(userId, account.getCredit());
     }
 }

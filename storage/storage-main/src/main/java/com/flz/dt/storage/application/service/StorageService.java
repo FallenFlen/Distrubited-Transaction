@@ -4,6 +4,7 @@ import com.flz.dt.common.exception.BusinessException;
 import com.flz.dt.storage.domain.aggrgate.Storage;
 import com.flz.dt.storage.domain.repository.StorageDomainRepository;
 import com.flz.storage.dto.StorageChangeRequestDTO;
+import com.flz.storage.dto.response.StorageInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,5 +47,11 @@ public class StorageService {
         });
 
         storageDomainRepository.saveAll(new ArrayList<>(storageMap.values()));
+    }
+
+    public List<StorageInfoResponseDTO> fetchStorageInfo(List<String> skuIds) {
+        return storageDomainRepository.findAllBySkuIds(skuIds).stream()
+                .map(it -> new StorageInfoResponseDTO(it.getSkuId(), it.getSkuName(), it.getCount()))
+                .collect(Collectors.toList());
     }
 }

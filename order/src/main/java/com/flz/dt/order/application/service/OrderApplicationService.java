@@ -9,7 +9,9 @@ import com.flz.dt.order.domain.command.OrderCreateCommand;
 import com.flz.dt.order.domain.repository.OrderDomainRepository;
 import com.flz.dt.order.presentation.converter.OrderDTOConverter;
 import com.flz.dt.order.presentation.dto.OrderCreateRequestDTO;
+import com.flz.dt.order.presentation.dto.PurchaseSummaryResponseDTO;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
+import com.flz.finance.dto.response.FinanceInfoResponseDTO;
 import com.flz.storage.dto.StorageChangeRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,5 +63,23 @@ public class OrderApplicationService {
         userCreditChangeRequestDTO.setUserId(userId);
         userCreditChangeRequestDTO.setAmount(totalPrice.negate());
         financeClient.changeUserCredit(userCreditChangeRequestDTO);
+    }
+
+    public PurchaseSummaryResponseDTO fetchPurchaseSummary(String userId, List<String> skuIds) {
+        PurchaseSummaryResponseDTO purchaseSummaryResponseDTO = new PurchaseSummaryResponseDTO();
+        purchaseSummaryResponseDTO.setFinanceInfo(fetchFinanceInfo(userId));
+        purchaseSummaryResponseDTO.setStorageInfos(fetchStorageInfos(skuIds));
+        return purchaseSummaryResponseDTO;
+    }
+
+    private PurchaseSummaryResponseDTO.FinanceInfo fetchFinanceInfo(String userId) {
+        FinanceInfoResponseDTO financeInfoResponseDTO = financeClient.fetchFinanceInfo(userId);
+        return new PurchaseSummaryResponseDTO.FinanceInfo(financeInfoResponseDTO.getUserId(), financeInfoResponseDTO.getCredit());
+    }
+
+    private List<PurchaseSummaryResponseDTO.StorageInfo> fetchStorageInfos(List<String> skuIds) {
+        return storageClient.fetchStorageInfo(skuIds).stream()
+                .map(it -> new PurchaseSummaryResponseDTO.StorageInfo(it.getSkuId(), it.getSkuName(), it.getStorage()))
+                .collect(Collectors.toList());
     }
 }

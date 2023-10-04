@@ -2,6 +2,7 @@ package com.flz.dt.order.application.client;
 
 import com.flz.dt.order.infrastructure.client.FinanceFeignClient;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
+import com.flz.finance.dto.response.FinanceInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,5 +13,9 @@ public class FinanceClient {
 
     public void changeUserCredit(UserCreditChangeRequestDTO requestDTO) {
         financeFeignClient.changeUserCredit(requestDTO);
+    }
+
+    public FinanceInfoResponseDTO fetchFinanceInfo(String userId) {
+        return financeFeignClient.fetchFinanceInfo(userId);
     }
 }

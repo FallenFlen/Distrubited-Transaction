@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Storage extends DomainAggregateRoot {
     private String skuId;
+    private String skuName;
     private Long count;
 
     public void change(Long changeCount) {
