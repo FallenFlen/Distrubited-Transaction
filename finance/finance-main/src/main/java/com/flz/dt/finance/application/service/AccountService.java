@@ -42,7 +42,7 @@ public class AccountService {
                     userId, account.getCredit(), amount));
         }
         // 变动金额
-        account.change(amount);
+        account.change(amount, requestDTO.getAction(), requestDTO.getTransactionId());
         accountDomainRepository.save(account);
     }
 
