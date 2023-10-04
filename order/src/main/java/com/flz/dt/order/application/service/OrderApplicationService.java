@@ -10,6 +10,7 @@ import com.flz.dt.order.domain.repository.OrderDomainRepository;
 import com.flz.dt.order.presentation.converter.OrderDTOConverter;
 import com.flz.dt.order.presentation.dto.OrderCreateRequestDTO;
 import com.flz.dt.order.presentation.dto.PurchaseSummaryResponseDTO;
+import com.flz.finance.dto.enums.UserCreditChangeAction;
 import com.flz.finance.dto.request.UserCreditChangeRequestDTO;
 import com.flz.finance.dto.response.FinanceInfoResponseDTO;
 import com.flz.storage.dto.StorageChangeRequestDTO;
@@ -62,6 +63,7 @@ public class OrderApplicationService {
         UserCreditChangeRequestDTO userCreditChangeRequestDTO = new UserCreditChangeRequestDTO();
         userCreditChangeRequestDTO.setUserId(userId);
         userCreditChangeRequestDTO.setAmount(totalPrice.negate());
+        userCreditChangeRequestDTO.setAction(UserCreditChangeAction.CHANGE);
         financeClient.changeUserCredit(userCreditChangeRequestDTO);
     }
 

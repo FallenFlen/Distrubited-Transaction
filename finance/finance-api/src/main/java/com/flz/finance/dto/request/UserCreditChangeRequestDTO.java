@@ -1,5 +1,6 @@
 package com.flz.finance.dto.request;
 
+import com.flz.finance.dto.enums.UserCreditChangeAction;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,8 @@ import java.math.BigDecimal;
 public class UserCreditChangeRequestDTO {
     @NotBlank
     private String userId;
+    @NotNull
+    private UserCreditChangeAction action;
     @NotNull
     private BigDecimal amount;
 }
