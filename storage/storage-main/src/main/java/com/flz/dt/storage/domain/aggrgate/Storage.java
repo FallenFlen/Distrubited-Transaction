@@ -3,16 +3,16 @@ package com.flz.dt.storage.domain.aggrgate;
 import com.flz.dt.common.domain.DomainAggregateRoot;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter(value = AccessLevel.PROTECTED)
-@Builder
+@SuperBuilder
 public class Storage extends DomainAggregateRoot {
     private String skuId;
     private Long count;
