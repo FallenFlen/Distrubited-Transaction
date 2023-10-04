@@ -3,6 +3,7 @@ package com.flz.dt.order.application.config.handler;
 import com.flz.dt.common.dto.ErrorResult;
 import com.flz.dt.common.exception.BusinessException;
 import com.flz.dt.common.exception.UnAuthorizedException;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResult handleUnAuthorizedException(UnAuthorizedException e) {
         log.error("UnAuthorizedException:", e);
+        return ErrorResult.of(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResult handleFeignException(FeignException e) {
+        log.error("FeignException:", e);
         return ErrorResult.of(e.getMessage());
     }
 
