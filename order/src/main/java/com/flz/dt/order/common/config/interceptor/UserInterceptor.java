@@ -1,5 +1,6 @@
 package com.flz.dt.order.common.config.interceptor;
 
+import com.flz.dt.common.constant.UserConstant;
 import com.flz.dt.common.context.User;
 import com.flz.dt.common.context.UserContext;
 import com.flz.dt.common.exception.UnAuthorizedException;
@@ -15,9 +16,9 @@ import java.util.Optional;
 public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String userId = Optional.ofNullable(request.getHeader("userId"))
+        String userId = Optional.ofNullable(request.getHeader(UserConstant.USER_ID_KEY))
                 .orElseThrow(() -> new UnAuthorizedException("Unauthorized!"));
-        String username = request.getHeader("username");
+        String username = request.getHeader(UserConstant.USER_NAME_KEY);
         UserContext.setUser(new User(userId, username));
         return true;
     }
