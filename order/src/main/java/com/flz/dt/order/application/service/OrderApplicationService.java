@@ -2,6 +2,7 @@ package com.flz.dt.order.application.service;
 
 import com.flz.dt.common.context.UserContext;
 import com.flz.dt.common.exception.BusinessException;
+import com.flz.dt.common.utils.UUIDUtils;
 import com.flz.dt.order.application.client.FinanceClient;
 import com.flz.dt.order.application.client.StorageClient;
 import com.flz.dt.order.domain.aggregate.Order;
@@ -64,6 +65,7 @@ public class OrderApplicationService {
         userCreditChangeRequestDTO.setUserId(userId);
         userCreditChangeRequestDTO.setAmount(totalPrice.negate());
         userCreditChangeRequestDTO.setAction(UserCreditChangeAction.CHANGE);
+        userCreditChangeRequestDTO.setTransactionId(UUIDUtils.uuid32());
         financeClient.changeUserCredit(userCreditChangeRequestDTO);
     }
 
