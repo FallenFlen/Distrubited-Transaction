@@ -1,4 +1,4 @@
-package com.flz.dt.order.application.config.interceptor;
+package com.flz.dt.order.common.config.interceptor;
 
 import com.flz.dt.common.context.User;
 import com.flz.dt.common.context.UserContext;
