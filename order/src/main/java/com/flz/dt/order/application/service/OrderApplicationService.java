@@ -54,32 +54,52 @@ public class OrderApplicationService {
         }
 
         // 库存模块扣减商品库存
-
+        transactionUtils.runAfterRollback(() -> rollbackStorage(requestDTO.getDetails()));
         changeStorage(requestDTO.getDetails());
         if (Boolean.TRUE.equals(requestDTO.getTriggerStage2Exception())) {
             throw new BusinessException("exception occurred after credit and storage changed");
         }
+
         // 保存订单
         orderDomainRepository.save(order);
     }
 
+    private void rollbackStorage(List<OrderCreateRequestDTO.OrderDetailCreateRequestDTO> details) {
+        transactionUtils.runInNewTransaction(() -> {
+            StorageChangeRequestDTO requestDTO = buildChangeStorageRequest(details);
+            LocalEventCreateCommand localEventCreateCommand = LocalEventCreateCommand.builder()
+                    .type(LocalEventType.STORAGE_ROLLBACK)
+                    .body(JsonUtils.silentMarshal(requestDTO))
+                    .build();
+            LocalEvent localEvent = LocalEvent.create(localEventCreateCommand);
+            localEventDomainRepository.saveAll(List.of(localEvent));
+        });
+    }
+
     private void changeStorage(List<OrderCreateRequestDTO.OrderDetailCreateRequestDTO> details) {
+        StorageChangeRequestDTO storageChangeRequestDTO = buildChangeStorageRequest(details);
+        storageClient.batchChangeStorage(storageChangeRequestDTO);
+    }
+
+    private StorageChangeRequestDTO buildChangeStorageRequest(List<OrderCreateRequestDTO.OrderDetailCreateRequestDTO> details) {
         StorageChangeRequestDTO storageChangeRequestDTO = new StorageChangeRequestDTO();
         List<StorageChangeRequestDTO.SkuStorage> skuStorages = details.stream()
                 .map(it -> new StorageChangeRequestDTO.SkuStorage(it.getSkuId(), -it.getCount()))
                 .collect(Collectors.toList());
         storageChangeRequestDTO.setSkuStorages(skuStorages);
-        storageClient.batchChangeStorage(storageChangeRequestDTO);
+        return storageChangeRequestDTO;
     }
 
     private void rollbackCredit(BigDecimal totalPrice, String userId, String transactionId) {
-        UserCreditChangeRequestDTO requestDTO = buildChangeCreditRequest(totalPrice, userId, transactionId, UserCreditChangeAction.ROLLBACK);
-        LocalEventCreateCommand localEventCreateCommand = LocalEventCreateCommand.builder()
-                .type(LocalEventType.FINANCE_CREDIT_ROLLBACK)
-                .body(JsonUtils.silentMarshal(requestDTO))
-                .build();
-        LocalEvent localEvent = LocalEvent.create(localEventCreateCommand);
-        localEventDomainRepository.saveAll(List.of(localEvent));
+        transactionUtils.runInNewTransaction(() -> {
+            UserCreditChangeRequestDTO requestDTO = buildChangeCreditRequest(totalPrice, userId, transactionId, UserCreditChangeAction.ROLLBACK);
+            LocalEventCreateCommand localEventCreateCommand = LocalEventCreateCommand.builder()
+                    .type(LocalEventType.FINANCE_CREDIT_ROLLBACK)
+                    .body(JsonUtils.silentMarshal(requestDTO))
+                    .build();
+            LocalEvent localEvent = LocalEvent.create(localEventCreateCommand);
+            localEventDomainRepository.saveAll(List.of(localEvent));
+        });
     }
 
     private void changeCredit(BigDecimal totalPrice, String userId, String transactionId) {

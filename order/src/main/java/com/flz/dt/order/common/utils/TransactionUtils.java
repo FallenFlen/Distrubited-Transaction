@@ -2,6 +2,8 @@ package com.flz.dt.order.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -15,6 +17,11 @@ public class TransactionUtils {
 
     public void runAfterRollback(Runnable runnable) {
         runByTransactionStatus(TransactionSynchronization.STATUS_ROLLED_BACK, runnable);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void runInNewTransaction(Runnable runnable) {
+        runnable.run();
     }
 
     private void runByTransactionStatus(int transactionStatus, Runnable runnable) {
