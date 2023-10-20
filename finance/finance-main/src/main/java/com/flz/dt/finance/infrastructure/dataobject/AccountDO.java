@@ -1,6 +1,6 @@
-package com.flz.dt.finance.infrastructure.entity;
+package com.flz.dt.finance.infrastructure.dataobject;
 
-import com.flz.dt.common.persist.entity.BaseEntity;
+import com.flz.dt.common.persist.entity.BaseDO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AccountEntity extends BaseEntity {
+public class AccountDO extends BaseDO {
     private String userId;
     private BigDecimal credit;
 }

@@ -1,6 +1,6 @@
-package com.flz.dt.order.infrastructure.entity;
+package com.flz.dt.order.infrastructure.dataobject;
 
-import com.flz.dt.common.persist.entity.BaseEntity;
+import com.flz.dt.common.persist.entity.BaseDO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Table("order")
-public class OrderEntity extends BaseEntity {
+public class OrderDO extends BaseDO {
     private String userId;
     private String description;
     private BigDecimal totalPrice;

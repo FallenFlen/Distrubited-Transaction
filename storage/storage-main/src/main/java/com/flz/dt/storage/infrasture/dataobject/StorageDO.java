@@ -1,6 +1,6 @@
-package com.flz.dt.storage.infrasture.entity;
+package com.flz.dt.storage.infrasture.dataobject;
 
-import com.flz.dt.common.persist.entity.BaseEntity;
+import com.flz.dt.common.persist.entity.BaseDO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @Setter
 @Table("storage")
-public class StorageEntity extends BaseEntity {
+public class StorageDO extends BaseDO {
     private String skuId;
     private String skuName;
     private Long count;
