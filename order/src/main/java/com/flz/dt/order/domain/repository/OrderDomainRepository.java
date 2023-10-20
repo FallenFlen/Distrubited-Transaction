@@ -3,8 +3,8 @@ package com.flz.dt.order.domain.repository;
 import com.flz.dt.order.domain.aggregate.Order;
 import com.flz.dt.order.infrastructure.converter.OrderDetailEntityConverter;
 import com.flz.dt.order.infrastructure.converter.OrderEntityConverter;
-import com.flz.dt.order.infrastructure.entity.OrderDetailEntity;
-import com.flz.dt.order.infrastructure.entity.OrderEntity;
+import com.flz.dt.order.infrastructure.dataobject.OrderDO;
+import com.flz.dt.order.infrastructure.dataobject.OrderDetailDO;
 import com.flz.dt.order.infrastructure.repository.OrderDetailJDBCRepository;
 import com.flz.dt.order.infrastructure.repository.OrderJDBCRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class OrderDomainRepository {
     private final OrderDetailEntityConverter orderDetailEntityConverter = OrderDetailEntityConverter.INSTANCE;
 
     public void save(Order order) {
-        OrderEntity orderEntity = orderEntityConverter.toEntity(order);
-        List<OrderDetailEntity> orderDetailEntities = orderDetailEntityConverter.toEntities(order.getDetails());
+        OrderDO orderEntity = orderEntityConverter.toEntity(order);
+        List<OrderDetailDO> orderDetailEntities = orderDetailEntityConverter.toEntities(order.getDetails());
         orderJDBCRepository.save(orderEntity);
         orderDetailJDBCRepository.saveAll(orderDetailEntities);
     }

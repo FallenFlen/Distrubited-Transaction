@@ -1,7 +1,7 @@
 package com.flz.dt.order.infrastructure.converter;
 
 import com.flz.dt.order.domain.aggregate.OrderDetail;
-import com.flz.dt.order.infrastructure.entity.OrderDetailEntity;
+import com.flz.dt.order.infrastructure.dataobject.OrderDetailDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -12,7 +12,7 @@ import java.util.List;
 public interface OrderDetailEntityConverter {
     OrderDetailEntityConverter INSTANCE = Mappers.getMapper(OrderDetailEntityConverter.class);
 
-    OrderDetailEntity toEntity(OrderDetail orderDetail);
+    OrderDetailDO toEntity(OrderDetail orderDetail);
 
-    List<OrderDetailEntity> toEntities(List<OrderDetail> orderDetails);
+    List<OrderDetailDO> toEntities(List<OrderDetail> orderDetails);
 }

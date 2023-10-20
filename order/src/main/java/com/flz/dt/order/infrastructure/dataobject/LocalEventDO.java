@@ -1,6 +1,6 @@
-package com.flz.dt.order.infrastructure.entity;
+package com.flz.dt.order.infrastructure.dataobject;
 
-import com.flz.dt.common.persist.entity.BaseEntity;
+import com.flz.dt.common.persist.entity.BaseDO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @Setter
 @Table("local_event")
-public class LocalEventEntity extends BaseEntity {
+public class LocalEventDO extends BaseDO {
     private String type;
     private String status;
     private String businessId;

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BaseEntity {
+public class BaseDO {
     @Id
     private String id;
     private String createBy;

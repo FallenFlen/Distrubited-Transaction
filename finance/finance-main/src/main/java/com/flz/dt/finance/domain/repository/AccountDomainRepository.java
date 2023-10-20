@@ -5,7 +5,7 @@ import com.flz.dt.finance.domain.aggrgate.Account;
 import com.flz.dt.finance.domain.aggrgate.AccountStatement;
 import com.flz.dt.finance.infrastructure.converter.AccountDOConverter;
 import com.flz.dt.finance.infrastructure.converter.AccountStatementDOConverter;
-import com.flz.dt.finance.infrastructure.entity.AccountStatementEntity;
+import com.flz.dt.finance.infrastructure.dataobject.AccountStatementDO;
 import com.flz.dt.finance.infrastructure.repository.AccountJDBCRepository;
 import com.flz.dt.finance.infrastructure.repository.AccountStatementJDBCRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class AccountDomainRepository {
 
     public void save(Account account) {
         accountJDBCRepository.save(accountDOConverter.toEntity(account));
-        List<AccountStatementEntity> changedStatements = Optional.ofNullable(account.getChangedStatements())
+        List<AccountStatementDO> changedStatements = Optional.ofNullable(account.getChangedStatements())
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(accountStatementDOConverter::toDO)

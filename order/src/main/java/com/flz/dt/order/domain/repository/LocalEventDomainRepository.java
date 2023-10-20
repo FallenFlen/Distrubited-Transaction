@@ -3,7 +3,7 @@ package com.flz.dt.order.domain.repository;
 import com.flz.dt.order.domain.aggregate.LocalEvent;
 import com.flz.dt.order.domain.enums.LocalEventStatus;
 import com.flz.dt.order.infrastructure.converter.LocalEventEntityConverter;
-import com.flz.dt.order.infrastructure.entity.LocalEventEntity;
+import com.flz.dt.order.infrastructure.dataobject.LocalEventDO;
 import com.flz.dt.order.infrastructure.repository.LocalEventJDBCRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -24,7 +24,7 @@ public class LocalEventDomainRepository {
     }
 
     public void saveAll(List<LocalEvent> localEvents) {
-        List<LocalEventEntity> localEventEntities = localEvents.stream()
+        List<LocalEventDO> localEventEntities = localEvents.stream()
                 .map(converter::toEntity)
                 .collect(Collectors.toList());
         localEventJDBCRepository.saveAll(localEventEntities);
