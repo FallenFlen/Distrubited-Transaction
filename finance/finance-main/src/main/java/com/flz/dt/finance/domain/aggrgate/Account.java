@@ -28,7 +28,7 @@ public class Account extends DomainAggregateRoot {
 
     public void change(BigDecimal amount, String transactionId) {
         this.credit = this.credit.add(amount);
-        createStatement(amount, transactionId);
+        createStatement(amount, transactionId, UserCreditChangeAction.CHANGE);
     }
 
     public void rollback(String transactionId) {
@@ -37,10 +37,10 @@ public class Account extends DomainAggregateRoot {
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("no statement found with transaction id:" + transactionId));
         this.credit = this.credit.add(statement.getChangedAmount().negate());
-        createStatement(statement.getChangedAmount().negate(), UUIDUtils.uuid32());
+        createStatement(statement.getChangedAmount().negate(), UUIDUtils.uuid32(), UserCreditChangeAction.ROLLBACK);
     }
 
-    private void createStatement(BigDecimal amount, String transactionId) {
+    private void createStatement(BigDecimal amount, String transactionId, UserCreditChangeAction action) {
         if (changedStatements == null) {
             changedStatements = new ArrayList<>();
         }
@@ -49,7 +49,7 @@ public class Account extends DomainAggregateRoot {
                 .accountId(this.id)
                 .changedAmount(amount)
                 .balance(this.credit)
-                .action(UserCreditChangeAction.CHANGE)
+                .action(action)
                 .transactionId(transactionId)
                 .build();
         AccountStatement statement = AccountStatement.create(accountStatementCreateCommand);
