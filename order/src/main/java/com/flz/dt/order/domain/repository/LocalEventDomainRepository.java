@@ -1,6 +1,7 @@
 package com.flz.dt.order.domain.repository;
 
 import com.flz.dt.order.domain.aggregate.LocalEvent;
+import com.flz.dt.order.domain.enums.LocalEventStatus;
 import com.flz.dt.order.infrastructure.converter.LocalEventEntityConverter;
 import com.flz.dt.order.infrastructure.entity.LocalEventEntity;
 import com.flz.dt.order.infrastructure.repository.LocalEventJDBCRepository;
@@ -15,6 +16,12 @@ import java.util.stream.Collectors;
 public class LocalEventDomainRepository {
     private final LocalEventJDBCRepository localEventJDBCRepository;
     private final LocalEventEntityConverter converter = LocalEventEntityConverter.INSTANCE;
+
+    public List<LocalEvent> findAllByStatusIn(List<LocalEventStatus> statuses) {
+        return localEventJDBCRepository.findAllByStatusIn(statuses).stream()
+                .map(converter::toDomain)
+                .collect(Collectors.toList());
+    }
 
     public void saveAll(List<LocalEvent> localEvents) {
         List<LocalEventEntity> localEventEntities = localEvents.stream()
