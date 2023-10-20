@@ -7,8 +7,8 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface OrderEntityConverter {
-    OrderEntityConverter INSTANCE = Mappers.getMapper(OrderEntityConverter.class);
+public interface OrderDOConverter {
+    OrderDOConverter INSTANCE = Mappers.getMapper(OrderDOConverter.class);
 
-    OrderDO toEntity(Order order);
+    OrderDO toDO(Order order);
 }

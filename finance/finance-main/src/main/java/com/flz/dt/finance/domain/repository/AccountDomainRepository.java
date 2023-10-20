@@ -36,7 +36,7 @@ public class AccountDomainRepository {
     }
 
     public void save(Account account) {
-        accountJDBCRepository.save(accountDOConverter.toEntity(account));
+        accountJDBCRepository.save(accountDOConverter.toDO(account));
         List<AccountStatementDO> changedStatements = Optional.ofNullable(account.getChangedStatements())
                 .orElse(Collections.emptyList())
                 .stream()

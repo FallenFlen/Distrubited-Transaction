@@ -7,10 +7,10 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface LocalEventEntityConverter {
-    LocalEventEntityConverter INSTANCE = Mappers.getMapper(LocalEventEntityConverter.class);
+public interface LocalEventDOConverter {
+    LocalEventDOConverter INSTANCE = Mappers.getMapper(LocalEventDOConverter.class);
 
     LocalEvent toDomain(LocalEventDO localEventEntity);
 
-    LocalEventDO toEntity(LocalEvent localEvent);
+    LocalEventDO toDO(LocalEvent localEvent);
 }

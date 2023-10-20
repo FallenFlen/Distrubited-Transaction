@@ -12,5 +12,5 @@ public interface AccountDOConverter {
 
     Account toDomain(AccountDO accountDO);
 
-    AccountDO toEntity(Account account);
+    AccountDO toDO(Account account);
 }
