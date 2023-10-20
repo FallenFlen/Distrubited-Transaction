@@ -1,5 +1,7 @@
 package com.flz.dt.common.context;
 
+import java.util.Optional;
+
 public class UserContext {
     private static final ThreadLocal<User> USER_IDS = new ThreadLocal<>();
 
@@ -13,5 +15,10 @@ public class UserContext {
 
     public static User getUser() {
         return USER_IDS.get();
+    }
+
+    public static User tryGetUserOrElseSystem() {
+        return Optional.ofNullable(getUser())
+                .orElse(User.systemUser());
     }
 }

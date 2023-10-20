@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class ScheduleService {
     private final LocalEventService localEventService;
 
-    @Scheduled(cron = "*/3 * * * *")
+    @Scheduled(cron = "0 0/3 * * * ?")
     public void scanLocalEvents(){
         localEventService.handleLocalEvents();
     }

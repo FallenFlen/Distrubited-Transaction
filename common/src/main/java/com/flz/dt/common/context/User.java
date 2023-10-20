@@ -12,4 +12,8 @@ import lombok.Setter;
 public class User {
     private String id;
     private String name;
+
+    public static User systemUser() {
+        return new User("System", "System");
+    }
 }

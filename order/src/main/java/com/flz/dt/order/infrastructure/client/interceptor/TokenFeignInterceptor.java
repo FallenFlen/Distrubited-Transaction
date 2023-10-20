@@ -8,7 +8,7 @@ import feign.RequestTemplate;
 public class TokenFeignInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        requestTemplate.header(UserConstant.USER_ID_KEY, UserContext.getUser().getId());
-        requestTemplate.header(UserConstant.USER_NAME_KEY, UserContext.getUser().getName());
+        requestTemplate.header(UserConstant.USER_ID_KEY, UserContext.tryGetUserOrElseSystem().getId());
+        requestTemplate.header(UserConstant.USER_NAME_KEY, UserContext.tryGetUserOrElseSystem().getName());
     }
 }

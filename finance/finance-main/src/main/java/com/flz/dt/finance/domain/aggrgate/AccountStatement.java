@@ -33,7 +33,7 @@ public class AccountStatement extends DomainAggregateRoot {
                 .transactionId(command.getTransactionId())
                 .build();
         accountStatement.generateId();
-        accountStatement.createBy(UserContext.getUser().getId());
+        accountStatement.createBy(UserContext.tryGetUserOrElseSystem().getId());
         return accountStatement;
     }
 }

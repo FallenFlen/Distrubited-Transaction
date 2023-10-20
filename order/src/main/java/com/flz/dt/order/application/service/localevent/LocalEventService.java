@@ -26,6 +26,7 @@ public class LocalEventService {
             return;
         }
 
+        log.info("{} events found, start processing", localEvents.size());
         localEventHandlers.forEach(handler -> {
             localEvents.stream()
                     .filter(event -> event.getType() == handler.getSupportType())
