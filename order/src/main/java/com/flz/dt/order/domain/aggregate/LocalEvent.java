@@ -22,11 +22,13 @@ public class LocalEvent extends DomainAggregateRoot {
     private String businessId;
     private String body;
     private Integer retryCount;
+    private String failReason;
 
-    public void fail(int maxRetryTime) {
+    public void fail(int maxRetryTime, String failReason) {
         this.status = LocalEventStatus.FAILED;
         this.retryCount++;
-        if (this.retryCount >= maxRetryTime) {
+        this.failReason = failReason;
+        if (this.retryCount > maxRetryTime) {
             this.status = LocalEventStatus.DEATH;
         }
     }

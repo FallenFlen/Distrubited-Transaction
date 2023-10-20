@@ -18,4 +18,5 @@ public class LocalEventEntity extends BaseEntity {
     private String businessId;
     private String body;
     private Integer retryCount;
+    private String failReason;
 }

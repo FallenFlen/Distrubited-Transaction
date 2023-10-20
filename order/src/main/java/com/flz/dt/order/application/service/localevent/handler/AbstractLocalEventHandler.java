@@ -27,7 +27,7 @@ public abstract class AbstractLocalEventHandler implements LocalEventHandler {
             localEvent.success();
         } catch (Throwable throwable) {
             log.error("local event[{}] failed and start retry with exception:", getSupportType(), throwable);
-            localEvent.fail(maxRetryTime);
+            localEvent.fail(maxRetryTime, throwable.getMessage());
         } finally {
             log.info("local event[{}] handle finished", getSupportType());
             localEventDomainRepository.saveAll(List.of(localEvent));
