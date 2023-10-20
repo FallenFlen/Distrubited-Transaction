@@ -24,7 +24,7 @@ public class StorageDomainRepository {
 
     public void saveAll(List<Storage> storages) {
         List<StorageDO> storageEntities = storages.stream()
-                .map(storageDOConverter::toEntity)
+                .map(storageDOConverter::toDO)
                 .collect(Collectors.toList());
         storageJDBCRepository.saveAll(storageEntities);
     }

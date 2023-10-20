@@ -12,5 +12,5 @@ public interface StorageDOConverter {
 
     Storage toDomain(StorageDO storageEntity);
 
-    StorageDO toEntity(Storage storage);
+    StorageDO toDO(Storage storage);
 }
