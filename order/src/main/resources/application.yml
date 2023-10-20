@@ -9,3 +9,5 @@ spring:
       httpclient:
         connection-timeout: 5000
 
+local-event:
+  max-retry: 5

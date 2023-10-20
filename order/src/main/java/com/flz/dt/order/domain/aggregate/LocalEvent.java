@@ -23,6 +23,18 @@ public class LocalEvent extends DomainAggregateRoot {
     private String body;
     private Integer retryCount;
 
+    public void fail(int maxRetryTime) {
+        this.status = LocalEventStatus.FAILED;
+        this.retryCount++;
+        if (this.retryCount >= maxRetryTime) {
+            this.status = LocalEventStatus.DEATH;
+        }
+    }
+
+    public void success() {
+        this.status = LocalEventStatus.SUCCESS;
+    }
+
     public static LocalEvent create(LocalEventCreateCommand command) {
         LocalEvent localEvent = LocalEvent.builder()
                 .type(command.getType())
