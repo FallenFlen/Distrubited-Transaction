@@ -5,6 +5,8 @@ import com.flz.dt.order.domain.repository.LocalEventDomainRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +17,8 @@ public abstract class AbstractLocalEventHandler implements LocalEventHandler {
     @Value("${local-event.max-retry:5}")
     protected int maxRetryTime;
 
+    @Async
+    @Transactional
     @Override
     public void handle(LocalEvent localEvent) {
         // body->request->feign call

@@ -1,7 +1,6 @@
 package com.flz.dt.order.application.service.localevent;
 
 import com.flz.dt.order.application.service.localevent.handler.LocalEventHandler;
-import com.flz.dt.order.common.utils.TransactionUtils;
 import com.flz.dt.order.domain.aggregate.LocalEvent;
 import com.flz.dt.order.domain.enums.LocalEventStatus;
 import com.flz.dt.order.domain.enums.LocalEventType;
@@ -20,7 +19,6 @@ import java.util.Set;
 public class LocalEventService {
     private final LocalEventDomainRepository localEventDomainRepository;
     private final LocalEventCollection localEventCollection;
-    private final TransactionUtils transactionUtils;
 
     public void handleLocalEvents() {
         List<LocalEvent> localEvents = localEventDomainRepository.findAllByStatusIn(LocalEventStatus.pendingProcessedStatus());
@@ -34,12 +32,12 @@ public class LocalEventService {
         List<LocalEventHandler> localEventHandlers = localEventCollection.getLocalEventHandlers();
         localEventHandlers.stream()
                 .filter(handler -> eventTypes.add(handler.getSupportType()))
-                .forEach(handler -> {
-                    transactionUtils.runInNewTransaction(() -> {
-                        localEvents.stream()
-                                .filter(event -> event.getType() == handler.getSupportType())
-                                .forEach(handler::handle);
-                    });
-                });
+                .forEach(handler -> processEventsWithHandler(handler, localEvents));
+    }
+
+    private void processEventsWithHandler(LocalEventHandler handler, List<LocalEvent> localEvents) {
+        localEvents.stream()
+                .filter(event -> event.getType() == handler.getSupportType())
+                .forEach(handler::handle);
     }
 }
