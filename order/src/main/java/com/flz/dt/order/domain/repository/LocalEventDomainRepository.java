@@ -2,7 +2,7 @@ package com.flz.dt.order.domain.repository;
 
 import com.flz.dt.order.domain.aggregate.LocalEvent;
 import com.flz.dt.order.domain.enums.LocalEventStatus;
-import com.flz.dt.order.infrastructure.converter.LocalEventEntityConverter;
+import com.flz.dt.order.infrastructure.converter.LocalEventDOConverter;
 import com.flz.dt.order.infrastructure.dataobject.LocalEventDO;
 import com.flz.dt.order.infrastructure.repository.LocalEventJDBCRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LocalEventDomainRepository {
     private final LocalEventJDBCRepository localEventJDBCRepository;
-    private final LocalEventEntityConverter converter = LocalEventEntityConverter.INSTANCE;
+    private final LocalEventDOConverter converter = LocalEventDOConverter.INSTANCE;
 
     public List<LocalEvent> findAllByStatusIn(List<LocalEventStatus> statuses) {
         return localEventJDBCRepository.findAllByStatusIn(statuses).stream()
@@ -25,7 +25,7 @@ public class LocalEventDomainRepository {
 
     public void saveAll(List<LocalEvent> localEvents) {
         List<LocalEventDO> localEventEntities = localEvents.stream()
-                .map(converter::toEntity)
+                .map(converter::toDO)
                 .collect(Collectors.toList());
         localEventJDBCRepository.saveAll(localEventEntities);
     }
